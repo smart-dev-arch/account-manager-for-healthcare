@@ -1,10 +1,8 @@
 import React, {FC} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import {FormInput} from '@renderer/components/FormComponents';
 import Modal from '@renderer/components/Modal';
-import {useAddress} from '@renderer/hooks';
-import {getManagedBanks} from '@renderer/selectors';
 import {setManagedBank} from '@renderer/store/app';
 import {AppDispatch, ManagedNode} from '@renderer/types';
 
@@ -14,7 +12,6 @@ interface ComponentProps {
 }
 
 const EditBankNicknameModal: FC<ComponentProps> = ({bank, close}) => {
-  const address = useAddress();
   const dispatch = useDispatch<AppDispatch>();
   const initialValues = {
     nickname: bank.nickname,
@@ -22,13 +19,10 @@ const EditBankNicknameModal: FC<ComponentProps> = ({bank, close}) => {
 
   type FormValues = typeof initialValues;
 
-  const managedBanks = useSelector(getManagedBanks);
-  const managedBank = managedBanks[address];
-
   const handleSubmit = ({nickname}: FormValues): void => {
     dispatch(
       setManagedBank({
-        ...managedBank,
+        ...bank,
         nickname,
       }),
     );
